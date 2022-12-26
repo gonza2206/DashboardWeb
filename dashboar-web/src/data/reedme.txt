@@ -1,0 +1,2 @@
+Esta carpeta data se encarga de que se creen correctamente el 
+mapa mundi, y simula la data que se va a graficar. 
