@@ -1,3 +1,10 @@
+# Para iniciar el proyecto sin tener los node modules 
+
+En un nuevo terminal poner el comando: 
+
+## `npm install`
+Esto instalara todas las dependencias necesarias
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
