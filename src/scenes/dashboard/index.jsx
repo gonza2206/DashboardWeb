@@ -63,6 +63,7 @@ function Dashboard() {
     getDateFromApi(date)
       .then(
         (response) => {
+          console.log(response.data);
           if (response.status === 200) {
 
             if (response.data.length === 0) {
@@ -78,7 +79,7 @@ function Dashboard() {
             }
             else {
               setNoData(false);
-              let tempResponse = response.data;
+              let tempResponse = response.data.meassure;
               tempResponse.forEach(element => {
                 const DataObj = {
                   x: element.date,
