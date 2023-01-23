@@ -7,8 +7,10 @@ import { dateToggleContext } from "../../provider/DateContext";
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import { mockTransactions } from "../../data/mockData";
+import NoData from '../../components/NoData';
+import TextInput from '../../components/TextInput';
+
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import EmailIcon from "@mui/icons-material/Email";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
@@ -16,29 +18,45 @@ import LineChart from "../../components/LineChart";
 import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
-import { getDateFromApi } from '../../services/axiosService';
-import NoData from '../../components/NoData';
 
+import { getDateFromApi } from '../../services/axiosService';
 
 function Dashboard() {
 
   const { date } = useContext(dateToggleContext);
 
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState(
+    [
+      {
+        x: '2023-1-1-0-0-0',
+        y: 0,
+      },
+    ]
+  );
   const [noData, setNoData] = useState(false);
+  const [state, setState] = useState(false);
+
+  const reRender = () => {
+    setState(!state);
+  }
 
   const parseFrame = (frame) => {
+    //Fase[°],Vrms[V],Irms[A],Ipk[A],Imax[A],Ih1[A],Ih2[A],Ih3[A],Ih4[A],Ih5[A],Ih6[A],Ih7[A],Ithd[%],Pa[kW],E[kWh]
     let frameArray = frame.split(',');
     let tension = frameArray[1];
+    let current = frameArray[2];
+    let maxCurrent = frameArray[4];
+    let h1 = frameArray[5];
+    let h2 = frameArray[6];
+    let h3 = frameArray[7];
+    let h4 = frameArray[8];
+    let h5 = frameArray[9];
+    let h6 = frameArray[10];
+    let h7 = frameArray[11];
+
     return (tension);
   }
-  const LineChartData = [
-    {
-      id: "Current",
-      color: tokens("dark").greenAccent[500],
-      data: info
-    }
-  ]
+
   useEffect(() => {
     let data = [];
 
@@ -59,9 +77,9 @@ function Dashboard() {
               )
             }
             else {
-
+              setNoData(false);
               let tempResponse = response.data;
-              tempResponse.forEach(element => {  
+              tempResponse.forEach(element => {
                 const DataObj = {
                   x: element.date,
                   y: parseFrame(element.meassure)
@@ -76,7 +94,7 @@ function Dashboard() {
         (error => alert(`An error has ocurred ${error}`))
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [state]);
 
 
 
@@ -120,17 +138,7 @@ function Dashboard() {
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
-            title="12,361"
-            subtitle="Emails Sent"
-            progress="0.75"
-            increase="+14%"
-            icon={
-              <EmailIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
+          <TextInput title={"Set Dates"} state={reRender}></TextInput>
         </Box>
         {/*Box 1*/}
         <Box
@@ -224,11 +232,13 @@ function Dashboard() {
               </Typography>}
             </Box>
           </Box>
+
           {/*LineChart */}
           <Box height="250px" m="-20px 0 0 0">
-            {noData === true ? <NoData /> : info && <LineChart isDashboard={true} data={LineChartData} />}
+            {noData === true ? <NoData /> : <LineChart isDashboard={true} data={info}/>}
           </Box>
         </Box>
+
         {/*Event Summary */}
         <Box
           gridColumn="span 4"

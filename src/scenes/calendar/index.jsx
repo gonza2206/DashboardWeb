@@ -22,7 +22,6 @@ import { dateToggleContext } from "../../provider/DateContext";
 
 const Calendar = (isDashboard ) => {
 
-
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [currentEvents, setCurrentEvents] = useState([]);
@@ -71,9 +70,10 @@ const Calendar = (isDashboard ) => {
     };
     const setDates = () => {
         if (state === true) {
-            updateDate(auxDate.startDate, auxDate.endDate)
+            updateDate(auxDate.startDate, auxDate.endDate, 0);
+            updateDate(auxDate.startDate, auxDate.endDate, 0);
         } else {
-            updateDate('2023-1-3', '2023-1-4')
+            updateDate('2023-1-3', '2023-1-4',0)
         }
 
     }

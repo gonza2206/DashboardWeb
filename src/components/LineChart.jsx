@@ -1,16 +1,29 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
+import { useEffect, useContext } from "react";
+import { dateToggleContext } from "../provider/DateContext";
 
-
-const LineChart = ({ isCustomLineColors = false, isDashboard = false, data}) => {
+const LineChart = ({isDashboard = false, data , refresh }) => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { date } = useContext(dateToggleContext);
+  const LineChartData = [
+    {
+      id: "Current",
+      color: tokens("dark").greenAccent[500],
+      data: data
+    }
+  ]
+
+  useEffect(() => {
+    console.log("componente renderizado");
+  }, [refresh]);
 
   return (
     <ResponsiveLine
-      data={data}
+      data={LineChartData}
       theme={{
         axis: {
           domain: {
@@ -58,7 +71,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false, data}) => 
       curve="catmullRom"
       axisTop={null}
       axisRight={null}
-      axisBottom={!isDashboard&&{
+      axisBottom={!isDashboard && {
         orient: "bottom",
         tickSize: 0,
         tickPadding: 10,

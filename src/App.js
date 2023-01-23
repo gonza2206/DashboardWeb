@@ -1,5 +1,5 @@
 import { useState, createContext } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Form, Route, Routes } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 
 import { ColorModeContext, useMode } from "./theme";
@@ -7,11 +7,11 @@ import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
 import Spaces from "./scenes/Spaces";
-import Contact from "./scenes/contact";
 import Calendar from "./scenes/calendar";
 import { DateProvider } from "./provider/DateContext";
 import Bar from "./scenes/bar";
 import Line from "./scenes/Line";
+import Contact from "./scenes/contact";
 
 function App() {
 
@@ -35,6 +35,7 @@ function App() {
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/Bar" element={<Bar/>} />
                 <Route path="/Line" element={<Line/>} />
+                {/* <Route path="/Contact" element={<Contact/>} /> */}
               </Routes>
 
             </main>
