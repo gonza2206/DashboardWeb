@@ -1,14 +1,12 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { useEffect, useContext } from "react";
-import { dateToggleContext } from "../provider/DateContext";
+import { useEffect } from "react";
 
-const LineChart = ({isDashboard = false, data , refresh }) => {
+const LineChart = ({ isDashboard = false, data, refresh }) => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { date } = useContext(dateToggleContext);
   const LineChartData = [
     {
       id: "Current",
@@ -18,7 +16,6 @@ const LineChart = ({isDashboard = false, data , refresh }) => {
   ]
 
   useEffect(() => {
-    console.log("componente renderizado");
   }, [refresh]);
 
   return (
@@ -71,15 +68,15 @@ const LineChart = ({isDashboard = false, data , refresh }) => {
       curve="catmullRom"
       axisTop={null}
       axisRight={null}
-      axisBottom={!isDashboard && {
+      axisBottom={!isDashboard ? {
         orient: "bottom",
         tickSize: 0,
         tickPadding: 10,
-        tickRotation: 25,
-        legend: isDashboard ? undefined : "Meassures", // added
+        tickRotation: 15,
+        legend: "Meassures", // added
         legendOffset: 80,
         legendPosition: "middle",
-      }}
+      } : null }
       axisLeft={{
         orient: "left",
         tickValues: 5, // added
@@ -92,7 +89,7 @@ const LineChart = ({isDashboard = false, data , refresh }) => {
       }}
       enableGridX={false}
       enableGridY={false}
-      pointSize={8}
+      pointSize={6}
       pointColor={{ theme: "background" }}
       pointBorderWidth={2}
       pointBorderColor={{ from: "serieColor" }}

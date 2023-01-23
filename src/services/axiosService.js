@@ -17,9 +17,9 @@ export function getDateFromApi(date) {
     }
     start = conditionDate(start);
     finish = conditionDate(finish);
-    console.log(`axiosService startdate: ${start}`);
-    console.log(`axiosService endtdate: ${finish}`);
-    console.log(`axiosService month: ${month}`);
+    // console.log(`axiosService startdate: ${start}`);
+    // console.log(`axiosService endtdate: ${finish}`);
+    // console.log(`axiosService month: ${month}`);
 
     return APIRequest.get('/data', {
         params: { StartDate: start, EndDate: finish , Month: month },

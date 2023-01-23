@@ -74,7 +74,7 @@ const TextInput = ({ title, state }) => {
 
             <Box display="flex" justifyContent="space-between" mt="1px">
                 <TextField
-                    label="Start Date"
+                    label="Start Date: 2023-1-17"
                     variant="standard"
                     size="small"
                     value={startDay}
@@ -83,11 +83,12 @@ const TextInput = ({ title, state }) => {
             </Box>
             <Box display="flex" justifyContent="space-between" mt="3px">
                 <TextField
-                    label="End Date"
+                    label="End Date: 2023-1-19"
                     variant="standard"
                     size="small"
                     value={endDay}
                     onChange={handleChange2}
+
                 />
             </Box>
 

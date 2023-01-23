@@ -4,6 +4,7 @@ import Header from '../../components/Header'
 import { useEffect } from "react";
 import { useState, useContext } from "react";
 import { dateToggleContext } from "../../provider/DateContext";
+
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import { mockTransactions } from "../../data/mockData";
@@ -23,8 +24,7 @@ import { getDateFromApi } from '../../services/axiosService';
 
 function Dashboard() {
 
-  const { date } = useContext(dateToggleContext);
-
+  const { date , updateValue } = useContext(dateToggleContext);
   const [info, setInfo] = useState(
     [
       {
@@ -35,12 +35,14 @@ function Dashboard() {
   );
   const [noData, setNoData] = useState(false);
   const [state, setState] = useState(false);
+  const [maxValue, setMaxValue] = useState();
+  const [averageValue, setAverageValue] = useState();
 
   const reRender = () => {
     setState(!state);
   }
 
-  const parseFrame = (frame) => {
+  const parseFrame = (frame, values) => {
     //Fase[°],Vrms[V],Irms[A],Ipk[A],Imax[A],Ih1[A],Ih2[A],Ih3[A],Ih4[A],Ih5[A],Ih6[A],Ih7[A],Ithd[%],Pa[kW],E[kWh]
     let frameArray = frame.split(',');
     let tension = frameArray[1];
@@ -66,7 +68,7 @@ function Dashboard() {
           console.log(response.data);
           if (response.status === 200) {
 
-            if (response.data.length === 0) {
+            if (response.data.meassure.length === 0) {
               setNoData(true);
               setInfo(
                 [
@@ -79,6 +81,8 @@ function Dashboard() {
             }
             else {
               setNoData(false);
+              setAverageValue(response.data.average);
+              setMaxValue(response.data.max)
               let tempResponse = response.data.meassure;
               tempResponse.forEach(element => {
                 const DataObj = {
@@ -88,6 +92,7 @@ function Dashboard() {
                 data.push(DataObj);
               });
               setInfo(data)
+              updateValue(response.data.max,response.data.average);
             }
           }
         }
@@ -235,9 +240,34 @@ function Dashboard() {
           </Box>
 
           {/*LineChart */}
-          <Box height="250px" m="-20px 0 0 0">
-            {noData === true ? <NoData /> : <LineChart isDashboard={true} data={info}/>}
-          </Box>
+          {
+            noData === true ? <NoData /> :
+            <Box height="250px" m="-30px 0 0 0">
+              {noData === true ? <NoData /> : <LineChart isDashboard={true} data={info} />}
+              <Box display={"flex"} sx={{ marginTop: "-40px" }} justifyContent={"center"}>
+                <Typography
+                  alignSelf={"center"}
+                  variant="h5"
+                  fontWeight="300"
+                  color={colors.grey[100]}
+
+                >
+                  Peak Current :
+                </Typography>
+                <Typography variant="h5" marginLeft={"10px"} fontWeight="300" color={colors.greenAccent[400]}> {maxValue} </Typography>
+                <Typography
+                  marginLeft={"40px"}
+                  variant="h5"
+                  fontWeight="300"
+                  color={colors.grey[100]}
+                >
+                  Average power:
+                </Typography>
+                <Typography variant="h5" marginLeft={"10px"} fontWeight="300" color={colors.greenAccent[400]}> {parseFloat(averageValue).toFixed(2)} </Typography>
+              </Box>
+            </Box>
+          }
+
         </Box>
 
         {/*Event Summary */}

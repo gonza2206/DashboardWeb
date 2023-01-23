@@ -1,10 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 
 export const dateToggleContext = React.createContext();
-
-// export function useDateContext() {
-//     return useContext(dateContext);
-// }
 
 
 export function DateProvider(props) {
@@ -16,12 +12,16 @@ export function DateProvider(props) {
     let finalDefaulTime = `${year}-${month}-4`;
     let defaultMonth = 0;
     if (month === 2) {//si estamos en febrero
-        let finalDefaulTime = `${year}-${month}-28`;
+        finalDefaulTime = `${year}-${month}-28`;
     }
     else {
-        let finalDefaulTime = `${year}-${month}-30`;
+        finalDefaulTime = `${year}-${month}-30`;
     }
 
+    const [values, setValues] = useState({
+        maxValue: 0,
+        averageValue: 0,
+    });
 
     const [date, setDate] = useState({
         startDate: initialDefaulTime,
@@ -29,9 +29,17 @@ export function DateProvider(props) {
         month: defaultMonth
     });
 
+    const updateValue = (max, average) => {
+        setValues((currentValue) => ({
+            ...currentValue,
+            maxValue: max,
+            averageValue: average,
+        }))
+       console.log("valusfghss",values);
+    }
+
     const updateDate = (newDate, lastDate, Month) => {
-        if(Month===undefined)
-        {
+        if (Month === undefined) {
             Month = 0;
         }
         setDate((currentDate) => ({
@@ -40,12 +48,12 @@ export function DateProvider(props) {
             endDate: lastDate,
             month: Month,
         }));
-        console.log(date);
+        //console.log(date);
     };
 
     return (
 
-        <dateToggleContext.Provider value={{ date, updateDate }}>
+        <dateToggleContext.Provider value={{ date, values,  updateDate, updateValue }}>
             {props.children}
         </dateToggleContext.Provider>
     );

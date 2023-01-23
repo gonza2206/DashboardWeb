@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup } from "@mui/material";
+import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
 import React from 'react'
@@ -14,16 +14,26 @@ const Line = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { date } = useContext(dateToggleContext);
+  const { date, values } = useContext(dateToggleContext);
 
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState(
+    [
+      {
+        x: '2023-1-1-0-0-0',
+        y: 0,
+      },
+    ]
+  );
   const [noData, setNoData] = useState(false);
   const [month, setMonth] = useState(0);
 
   const parseFrame = (frame) => {
     let frameArray = frame.split(',');
     let tension = frameArray[1];
+    console.log(`values ${values.maxValue}`);
+    
     return (tension);
+
   }
 
   useEffect(() => {
@@ -34,12 +44,12 @@ const Line = () => {
   const getData = (monthData) => {
     setMonth(monthData);
     let data = [];
-    getDateFromApi(date, month)
+    getDateFromApi(date)
       .then(
         (response) => {
           if (response.status === 200) {
-            console.log(response.data.length);
-            if (response.data.length === 0) {
+
+            if (response.data.meassure.length === 0) {
               setNoData(true);
               setInfo(
                 [
@@ -51,8 +61,8 @@ const Line = () => {
               )
             }
             else {
-
-              let tempResponse = response.data;
+              setNoData(false);
+              let tempResponse = response.data.meassure;
               tempResponse.forEach(element => {
                 const DataObj = {
                   x: element.date,
@@ -61,8 +71,6 @@ const Line = () => {
                 data.push(DataObj);
               });
               setInfo(data)
-              console.log(LineChartData);
-              
             }
           }
         }
@@ -70,14 +78,6 @@ const Line = () => {
         (error => alert(`An error has ocurred ${error}`))
       );
   }
-
-  const LineChartData = [
-    {
-      id: "Current",
-      color: tokens("dark").greenAccent[500],
-      data: info
-    }
-  ]
 
   const style = {
     backgroundColor: colors.blueAccent[700],
@@ -142,9 +142,30 @@ const Line = () => {
             December
           </Button>
         </ButtonGroup>
+        <Box display={"flex"}  justifyContent={"center"} marginTop={"10px"}>
+          <Typography
+            alignSelf={"center"}
+            variant="h4"
+            fontWeight="300"
+            color={colors.grey[100]}
+            
+          >
+            Peak Current :
+          </Typography>
+          <Typography variant="h4" marginLeft={"10px"} fontWeight="300" color={colors.greenAccent[400]}> {values.maxValue} </Typography>
+          <Typography
+            marginLeft={"40px"}
+            variant="h4"
+            fontWeight="300"
+            color={colors.grey[100]}
+          >
+            Average power:
+          </Typography>
+          <Typography variant="h4" marginLeft={"10px"} fontWeight="300" color={colors.greenAccent[400]}> {parseFloat(values.averageValue).toFixed(2)} </Typography>
+        </Box>
       </Box>
-      <Box height="75vh">
-        {noData === true ? <NoData /> : info && <LineChart isDashboard={false} data={LineChartData} />}
+      <Box height="65vh">
+        {noData === true ? <NoData /> : <LineChart isDashboard={false} data={info} />}
       </Box>
     </Box>
   );
