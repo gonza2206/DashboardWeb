@@ -9,14 +9,35 @@ import { tokens } from "../../theme";
 import { getDateFromApi } from '../../services/axiosService';
 import NoData from '../../components/NoData';
 import { useTheme } from "@mui/material";
-
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 const Line = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { date, values } = useContext(dateToggleContext);
-
+  const [isSelected, setIsSelected] = useState({
+    current: true,
+    peak: true,
+    power: true,
+  });
   const [info, setInfo] = useState(
+    [
+      {
+        x: '2023-1-1-0-0-0',
+        y: 0,
+      },
+    ]
+  );
+  const [power, setPower] = useState(
+    [
+      {
+        x: '2023-1-1-0-0-0',
+        y: 0,
+      },
+    ]
+  );
+  const [peak, setPeak] = useState(
     [
       {
         x: '2023-1-1-0-0-0',
@@ -27,13 +48,24 @@ const Line = () => {
   const [noData, setNoData] = useState(false);
   const [month, setMonth] = useState(0);
 
-  const parseFrame = (frame) => {
-    let frameArray = frame.split(',');
-    let tension = frameArray[2];
-    console.log(`values ${values.maxValue}`);
-    
-    return (tension);
-
+  const parseFrame = (frame, option) => {
+    //Fase[°],Vrms[V],Irms[A],Ipk[A],Imax[A],Ih1[A],Ih2[A],Ih3[A],Ih4[A],Ih5[A],Ih6[A],Ih7[A],Ithd[%],Pa[kW],E[kWh]
+    let response = 0;
+    let frameArray;
+    frameArray = frame.split(',');
+    if (option === "LineData") {
+      response = frameArray[2];
+      return (response);
+    }
+    if (option === "power") {
+      response = frameArray[13];
+      return (response);
+    }
+    if (option === "peak") {
+      response = frameArray[3];
+      return (response);
+    }
+    return (response);
   }
 
   useEffect(() => {
@@ -44,6 +76,8 @@ const Line = () => {
   const getData = (monthData) => {
     setMonth(monthData);
     let data = [];
+    let powerData = [];
+    let peakData = [];
     getDateFromApi(date)
       .then(
         (response) => {
@@ -64,13 +98,28 @@ const Line = () => {
               setNoData(false);
               let tempResponse = response.data.meassure;
               tempResponse.forEach(element => {
+                //Current Data
                 const DataObj = {
                   x: element.date,
-                  y: parseFrame(element.meassure)
+                  y: parseFrame(element.meassure, "LineData")
                 }
                 data.push(DataObj);
+                //Power data
+                const PowerObj = {
+                  x: element.date,
+                  y: parseFrame(element.meassure, "power")
+                }
+                powerData.push(PowerObj);
+                //Peak Data
+                const PeakObj = {
+                  x: element.date,
+                  y: parseFrame(element.meassure, "peak")
+                }
+                peakData.push(PeakObj)
               });
               setInfo(data)
+              setPower(powerData);
+              setPeak(peakData);
             }
           }
         }
@@ -88,6 +137,57 @@ const Line = () => {
     margin: "2px"
   }
 
+  function PowerhandleChange(event) {
+    if (!event.target.checked) {
+      setIsSelected((currentValue) => ({
+        ...currentValue,
+        power: false,
+      }));
+
+    }
+    else {
+      setIsSelected((currentValue) => ({
+        ...currentValue,
+        power: true,
+      }));
+
+    }
+  }
+
+
+  function CurrenthandlerChange(event) {
+    if (!event.target.checked) {
+      setIsSelected((currentValue) => ({
+        ...currentValue,
+        current: false,
+      }));
+
+    }
+    else {
+      setIsSelected((currentValue) => ({
+        ...currentValue,
+        current: true,
+      }));
+    }
+  }
+
+
+  function PeakhandlerChange(event) {
+    if (!event.target.checked) {
+      setIsSelected((currentValue) => ({
+        ...currentValue,
+        peak: false,
+      }));
+
+    }
+    else {
+      setIsSelected((currentValue) => ({
+        ...currentValue,
+        peak: true,
+      }));
+
+    }
+  }
   return (
     <Box m="20px">
       <Header title="Line Chart" subtitle="Simple Line Chart" />
@@ -142,13 +242,13 @@ const Line = () => {
             December
           </Button>
         </ButtonGroup>
-        <Box display={"flex"}  justifyContent={"center"} marginTop={"10px"}>
+        <Box display={"flex"} justifyContent={"center"} marginTop={"10px"}>
           <Typography
             alignSelf={"center"}
             variant="h4"
             fontWeight="300"
             color={colors.grey[100]}
-            
+
           >
             Peak Current :
           </Typography>
@@ -165,7 +265,7 @@ const Line = () => {
         </Box>
       </Box>
       <Box height="65vh">
-        {noData === true ? <NoData /> : <LineChart isDashboard={false} data={info} />}
+        {noData === true ? <NoData /> : <LineChart isDashboard={false} data={info} powerData={power} peakData={peak} selected={isSelected} />}
       </Box>
     </Box>
   );

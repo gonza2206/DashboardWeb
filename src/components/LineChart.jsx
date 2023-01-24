@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import { useEffect, useState } from "react";
 
-const LineChart = ({ isDashboard = false, data, refresh, powerData, peakData, selected }) => {
+const LineChart = ({ isDashboard , data, refresh, powerData, peakData, selected }) => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -26,6 +26,12 @@ const LineChart = ({ isDashboard = false, data, refresh, powerData, peakData, se
 
   const setData = () => {
     let LineChartData = [power, peak, current]
+
+    if (isDashboard===false) {
+      console.log(LineChartData);
+      
+      return(LineChartData)
+    }
 
     if(selected.current===false)
     {
