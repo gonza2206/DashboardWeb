@@ -1,26 +1,75 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const LineChart = ({ isDashboard = false, data, refresh }) => {
+const LineChart = ({ isDashboard = false, data, refresh, powerData, peakData, selected }) => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const LineChartData = [
+
+  let power = {
+    id: "Power",
+    color: tokens("dark").blueAccent[500],
+    data: powerData
+  }
+  let current = {
+    id: "Current",
+    color: tokens("dark").greenAccent[500],
+    data: data
+  }
+  let peak = {
+    id: "Peak Current",
+    color: tokens("dark").redAccent[500],
+    data: peakData
+  }
+
+  const setData = () => {
+    let LineChartData = [power, peak, current]
+
+    if(selected.current===false)
     {
-      id: "Current",
-      color: tokens("dark").greenAccent[500],
-      data: data
+      LineChartData = [power, peak]
     }
-  ]
+    if(selected.peak===false)
+    {
+      LineChartData = [power, current]
+    }
+    if(selected.power===false)
+    {
+      LineChartData = [peak, current]
+    }
+
+
+    if(selected.current===false && selected.peak===false)
+    {
+      LineChartData = [power]
+    }
+    if(selected.current===false && selected.power===false)
+    {
+      LineChartData = [peak]
+    }
+    if(selected.peak===false && selected.power===false)
+    {
+      LineChartData = [current]
+    }
+    if(selected.peak===false && selected.power===false&& selected.current===false)
+    {
+      LineChartData = []
+    }
+
+    console.log(LineChartData);
+
+    return (LineChartData)
+  }
 
   useEffect(() => {
-  }, [refresh]);
+
+  }, [refresh, selected]);
 
   return (
     <ResponsiveLine
-      data={LineChartData}
+      data={setData()}
       theme={{
         axis: {
           domain: {
@@ -61,7 +110,7 @@ const LineChart = ({ isDashboard = false, data, refresh }) => {
         type: "linear",
         min: "auto",
         max: "auto",
-        stacked: true,
+        stacked: false,
         reverse: false,
       }}
       yFormat=" >-.2f"
@@ -76,7 +125,7 @@ const LineChart = ({ isDashboard = false, data, refresh }) => {
         legend: "Meassures", // added
         legendOffset: 80,
         legendPosition: "middle",
-      } : null }
+      } : null}
       axisLeft={{
         orient: "left",
         tickValues: 5, // added
@@ -90,6 +139,7 @@ const LineChart = ({ isDashboard = false, data, refresh }) => {
       enableGridX={false}
       enableGridY={false}
       pointSize={6}
+      enableSlices="x"
       pointColor={{ theme: "background" }}
       pointBorderWidth={2}
       pointBorderColor={{ from: "serieColor" }}

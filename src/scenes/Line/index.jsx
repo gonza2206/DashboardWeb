@@ -29,7 +29,7 @@ const Line = () => {
 
   const parseFrame = (frame) => {
     let frameArray = frame.split(',');
-    let tension = frameArray[1];
+    let tension = frameArray[2];
     console.log(`values ${values.maxValue}`);
     
     return (tension);

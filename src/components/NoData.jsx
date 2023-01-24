@@ -5,7 +5,7 @@ import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
 
 
-const NoData = () => {
+const NoData = ({inBox}) => {
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -24,7 +24,7 @@ const NoData = () => {
                 color={colors.redAccent[400]}
             >
                 NO DATA HAS BEEN FOUND!<br/><br/>
-                ---Please select other date---
+                {inBox===true ? "" : "---Please select other date---"}
             </Typography>
         </Box>
     );

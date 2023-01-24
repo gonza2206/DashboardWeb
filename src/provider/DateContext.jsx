@@ -35,7 +35,7 @@ export function DateProvider(props) {
             maxValue: max,
             averageValue: average,
         }))
-       console.log("valusfghss",values);
+       //console.log("values",values);
     }
 
     const updateDate = (newDate, lastDate, Month) => {

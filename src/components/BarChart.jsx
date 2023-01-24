@@ -2,14 +2,53 @@ import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
 import { mockBarData as data } from "../data/mockData";
+import { useEffect } from "react";
 
-const BarChart = ({ isDashboard = false }) => {
+
+const BarChart = ({ isDashboard = false, frame = [0, 0, 0, 0, 0, 0, 0] }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const BarData = [{
+    harmonic: "H1",
+    Harmonics: parseFloat(frame[0]).toFixed(2),
+    HarmonicsColor: "hsl(296, 70%, 50%)",
+  },
+  {
+    harmonic: "H2",
+    Harmonics: parseFloat(frame[1]).toFixed(2),
+    HarmonicsColor: "hsl(296, 70%, 50%)",
+  },
+  {
+    harmonic: "H3",
+    Harmonics: parseFloat(frame[2]).toFixed(2),
+    HarmonicsColor: "hsl(296, 70%, 50%)",
+  },
+  {
+    harmonic: "H4",
+    Harmonics: parseFloat(frame[3]).toFixed(2),
+    HarmonicsColor: "hsl(296, 70%, 50%)",
+  },
+  {
+    harmonic: "H5",
+    Harmonics: parseFloat(frame[4]).toFixed(2),
+    HarmonicsColor: "hsl(296, 70%, 50%)",
+  },
+  {
+    harmonic: "H6",
+    Harmonics: parseFloat(frame[5]).toFixed(2),
+    HarmonicsColor: "hsl(296, 70%, 50%)",
+  },
+  {
+    harmonic: "H7",
+    Harmonics: parseFloat(frame[6]).toFixed(2),
+    HarmonicsColor: "hsl(296, 70%, 50%)",
+  }]
+
+
   return (
     <ResponsiveBar
-      data={data} //Pasar objeto con la informacion
+      data={BarData} //Pasar objeto con la informacion
       theme={{
         // added
         axis: {
@@ -39,10 +78,10 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
-      indexBy="country"
+      keys={["Harmonics"]}
+      indexBy="harmonic"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-      padding={0.6}
+      padding={isDashboard===true? 0.6 : 0.5}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
       colors={{ scheme: "nivo" }}
@@ -76,24 +115,24 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "country", // changed
+        legend: isDashboard ? undefined : "Harmonics", // changed
         legendPosition: "middle",
-        legendOffset: 32,
+        legendOffset: 40,
       }}
       axisLeft={{
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "food", // changed
+        legend: isDashboard ? undefined : "%", // changed
         legendPosition: "middle",
         legendOffset: -40,
       }}
-      enableLabel={false}
-      labelSkipWidth={12}
-      labelSkipHeight={12}
+      enableLabel={true}
+      labelSkipWidth={20}
+      labelSkipHeight={20}
       labelTextColor={{
         from: "color",
-        modifiers: [["darker", 1.6]],
+        modifiers: [["darker", 6]],
       }}
       legends={[
         {
@@ -119,6 +158,22 @@ const BarChart = ({ isDashboard = false }) => {
           ],
         },
       ]}
+      tooltip={({value }) => (
+            <div
+                style={{
+                    padding: 12,
+                    color:colors.greenAccent[500],
+                    background: colors.primary[600],
+                }}
+            >
+                <span>Value </span>
+                
+                <strong>
+                    {value}
+                </strong>
+            </div>
+        )}
+      isInteractive={true}
       role="application"
       barAriaLabel={function (e) {
         return e.id + ": " + e.formattedValue + " in country: " + e.indexValue;
