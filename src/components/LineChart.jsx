@@ -1,9 +1,9 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-const LineChart = ({ isDashboard , data, refresh, powerData, peakData, selected }) => {
+const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected }) => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -27,44 +27,34 @@ const LineChart = ({ isDashboard , data, refresh, powerData, peakData, selected 
   const setData = () => {
     let LineChartData = [power, peak, current]
 
-    if (isDashboard===false) {
-      console.log(LineChartData);
-      
-      return(LineChartData)
+    if (isDashboard === false) {
+
+      return (LineChartData)
     }
 
-    if(selected.current===false)
-    {
+    if (selected.current === false) {
       LineChartData = [power, peak]
     }
-    if(selected.peak===false)
-    {
+    if (selected.peak === false) {
       LineChartData = [power, current]
     }
-    if(selected.power===false)
-    {
+    if (selected.power === false) {
       LineChartData = [peak, current]
     }
 
 
-    if(selected.current===false && selected.peak===false)
-    {
+    if (selected.current === false && selected.peak === false) {
       LineChartData = [power]
     }
-    if(selected.current===false && selected.power===false)
-    {
+    if (selected.current === false && selected.power === false) {
       LineChartData = [peak]
     }
-    if(selected.peak===false && selected.power===false)
-    {
+    if (selected.peak === false && selected.power === false) {
       LineChartData = [current]
     }
-    if(selected.peak===false && selected.power===false&& selected.current===false)
-    {
+    if (selected.peak === false && selected.power === false && selected.current === false) {
       LineChartData = []
     }
-
-    console.log(LineChartData);
 
     return (LineChartData)
   }

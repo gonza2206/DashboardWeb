@@ -69,16 +69,16 @@ const Line = () => {
   }
 
   useEffect(() => {
-    getData(month);
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [month]);
 
-  const getData = (monthData) => {
-    setMonth(monthData);
+  const getData = () => {
+
     let data = [];
     let powerData = [];
     let peakData = [];
-    getDateFromApi(date)
+    getDateFromApi(date, month)
       .then(
         (response) => {
           if (response.status === 200) {
@@ -202,43 +202,43 @@ const Line = () => {
             February
           </Button>
 
-          <Button sx={style}>
+          <Button sx={style} onClick={() => setMonth(3)}>
             March
           </Button>
 
-          <Button sx={style}>
+          <Button sx={style} onClick={() => setMonth(4)}>
             April
           </Button>
 
-          <Button sx={style}>
+          <Button sx={style} onClick={() => setMonth(5)}>
             May
           </Button>
 
-          <Button sx={style}>
+          <Button sx={style} onClick={() => setMonth(6)}>
             June
           </Button>
 
-          <Button sx={style}>
+          <Button sx={style} onClick={() => setMonth(7)}>
             July
           </Button>
 
-          <Button sx={style}>
+          <Button sx={style} onClick={() => setMonth(8)}>
             August
           </Button>
 
-          <Button sx={style}>
+          <Button sx={style} onClick={() => setMonth(9)}>
             September
           </Button>
 
-          <Button sx={style}>
+          <Button sx={style} onClick={() => setMonth(10)}>
             October
           </Button>
 
-          <Button sx={style}>
+          <Button sx={style} onClick={() => setMonth(11)}>
             November
           </Button>
 
-          <Button sx={style}>
+          <Button sx={style} onClick={() => setMonth(12)}>
             December
           </Button>
         </ButtonGroup>

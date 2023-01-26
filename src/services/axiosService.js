@@ -2,11 +2,11 @@ import { conditionDate } from '../utils/Utils';
 import APIRequest from './axios.config';
 //  El nombre APIRequest es un nombre que yo elijo
 
-export function getDateFromApi(date) {
-
+export function getDateFromApi(date, monthParameter = 0) {
+    console.log(monthParameter);
     let start = date.startDate;
     let finish = date.endDate
-    let month = date.month
+    let month = monthParameter
     //console.log(date);
     if (start === undefined) {
         start = '2023-1-3-16-24-25';
