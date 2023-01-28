@@ -95,9 +95,10 @@ const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected }
         },
         tooltip: {
           container: {
-            color: colors.primary[500],
+            color: colors.primary[700],
           },
         },
+
       }}
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }} // added
       margin={{ top: 50, right: 110, bottom: 90, left: 60 }}

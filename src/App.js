@@ -12,6 +12,8 @@ import { DateProvider } from "./provider/DateContext";
 import Bar from "./scenes/bar";
 import Line from "./scenes/Line";
 import Contact from "./scenes/contact";
+import FAQ from "./scenes/faq";
+import Contacts from "./scenes/contact";
 
 function App() {
 
@@ -35,6 +37,9 @@ function App() {
                 <Route path="/calendar" element={<Calendar />} />
                 <Route path="/Bar" element={<Bar/>} />
                 <Route path="/Line" element={<Line/>} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/contacts" element={<Contacts />} />
+                
                 {/* <Route path="/Contact" element={<Contact/>} /> */}
               </Routes>
 
