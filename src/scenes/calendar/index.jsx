@@ -118,7 +118,7 @@ const Calendar = (isDashboard ) => {
                             </ListItem>
                         ))}
                         <Button variant="contained" onClick={() => setDates()}>
-                            <Typography variant="h7" >Double Click to set the dates</Typography>
+                            <Typography variant="h7" >Click to set the dates</Typography>
                         </Button>
                     </List>
 

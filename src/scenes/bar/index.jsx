@@ -15,7 +15,7 @@ import { getDateFromApi } from '../../services/axiosService';
 const Bar = () => {
 
   const theme = useTheme();
-  const { date } = useContext(dateToggleContext);
+  const { date, floor } = useContext(dateToggleContext);
   const [noData, setNoData] = useState(false);
   
   const [frame, setFrame] = useState();
@@ -27,7 +27,7 @@ useEffect(() => {
 
 const getData = ()=>{
 
-    getDateFromApi(date)
+    getDateFromApi(date, 0, floor.id)
       .then(
         (response) => {
           //console.log(response.data);

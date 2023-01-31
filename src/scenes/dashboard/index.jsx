@@ -26,7 +26,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 function Dashboard() {
 
-  const { date, updateValue } = useContext(dateToggleContext);
+  const { date, updateValue, floor } = useContext(dateToggleContext);
   const [info, setInfo] = useState(
     [
       {
@@ -57,9 +57,9 @@ function Dashboard() {
   const [averageValue, setAverageValue] = useState();
   const [frame, setFrame] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
   const [isSelected, setIsSelected] = useState({
-    current:true,
-    peak:true,
-    power:true,
+    current: true,
+    peak: true,
+    power: true,
   });
 
 
@@ -92,12 +92,11 @@ function Dashboard() {
     let powerData = [];
     let peakData = [];
 
-    getDateFromApi(date)
+    getDateFromApi(date, 0, floor.id)
       .then(
         (response) => {
-          //console.log(response.data);
+          console.log(response);
           if (response.status === 200) {
-
             if (response.data.meassure.length === 0) {
               setNoData(true);
               setInfo(
@@ -157,32 +156,32 @@ function Dashboard() {
       setIsSelected((currentValue) => ({
         ...currentValue,
         power: false,
-    }));
-  
+      }));
+
     }
-    else{
+    else {
       setIsSelected((currentValue) => ({
         ...currentValue,
         power: true,
-    }));
+      }));
 
     }
   }
-  
-  
+
+
   function CurrenthandlerChange(event) {
     if (!event.target.checked) {
       setIsSelected((currentValue) => ({
         ...currentValue,
         current: false,
-    }));
-    
+      }));
+
     }
     else {
       setIsSelected((currentValue) => ({
         ...currentValue,
         current: true,
-    }));
+      }));
     }
   }
 
@@ -192,15 +191,15 @@ function Dashboard() {
       setIsSelected((currentValue) => ({
         ...currentValue,
         peak: false,
-    }));
-  
+      }));
+
     }
     else {
       setIsSelected((currentValue) => ({
         ...currentValue,
         peak: true,
-    }));
-  
+      }));
+
     }
   }
 
@@ -275,7 +274,7 @@ function Dashboard() {
         >
           {noData === true ? <NoData inBox={true} /> : <StatBox
             title="E [kwh]"
-            subtitle={parseFloat(frame[8]).toFixed(2)}
+            subtitle={isNaN(parseFloat(frame[8]).toFixed(2)) === false ? parseFloat(frame[8]).toFixed(2) : '0.00'}
             progress={parseFloat(frame[7]).toFixed(2) / 10}
             icon={
               <EmojiObjectsIcon
@@ -347,7 +346,7 @@ function Dashboard() {
           {
             noData === true ? <NoData /> :
               <Box height="250px" m="-30px 0 0 0">
-                {noData === true ? <NoData /> : <LineChart isDashboard={true} data={info} powerData={power} peakData={peak} selected={isSelected}/>}
+                {noData === true ? <NoData /> : <LineChart isDashboard={true} data={info} powerData={power} peakData={peak} selected={isSelected} />}
                 <Box display={"flex"} sx={{ marginTop: "-60px" }} justifyContent={"center"}>
                   <Typography
                     alignSelf={"center"}

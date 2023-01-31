@@ -8,15 +8,11 @@ export function DateProvider(props) {
     const actualDate = new Date();
     let year = actualDate.getFullYear();
     let month = actualDate.getMonth();
-    let initialDefaulTime = `${year}-${month}-3`;
-    let finalDefaulTime = `${year}-${month}-4`;
+    let day = actualDate.getDate();
+    let initialDefaulTime = `${year}-${month}-1`;
+    let finalDefaulTime = `${year}-${month}-${day}`;
     let defaultMonth = 0;
-    if (month === 2) {//si estamos en febrero
-        finalDefaulTime = `${year}-${month}-28`;
-    }
-    else {
-        finalDefaulTime = `${year}-${month}-30`;
-    }
+
 
     const [values, setValues] = useState({
         maxValue: 0,
@@ -29,13 +25,24 @@ export function DateProvider(props) {
         month: defaultMonth
     });
 
+    const [floor, setFloor] = useState({
+        id: 1
+    });
+
+    const updateFloorValue = (newID) => {
+        setFloor((currentValue) => ({
+            ...currentValue,
+            id: newID,
+        }))
+    }
+
+
     const updateValue = (max, average) => {
         setValues((currentValue) => ({
             ...currentValue,
             maxValue: max,
             averageValue: average,
         }))
-       //console.log("values",values);
     }
 
     const updateDate = (newDate, lastDate, Month) => {
@@ -48,12 +55,11 @@ export function DateProvider(props) {
             endDate: lastDate,
             month: Month,
         }));
-        //console.log(date);
     };
 
     return (
 
-        <dateToggleContext.Provider value={{ date, values,  updateDate, updateValue }}>
+        <dateToggleContext.Provider value={{ date, values, floor, updateDate, updateValue, updateFloorValue }}>
             {props.children}
         </dateToggleContext.Provider>
     );

@@ -15,7 +15,7 @@ const Line = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { date, values } = useContext(dateToggleContext);
+  const { date, values, floor } = useContext(dateToggleContext);
   const [isSelected, setIsSelected] = useState({
     current: true,
     peak: true,
@@ -78,7 +78,7 @@ const Line = () => {
     let data = [];
     let powerData = [];
     let peakData = [];
-    getDateFromApi(date, month)
+    getDateFromApi(date, month, floor.id)
       .then(
         (response) => {
           if (response.status === 200) {
