@@ -26,7 +26,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 function Dashboard() {
 
-  const { date, updateValue, floor } = useContext(dateToggleContext);
+  const { date, maxConsumption, maxCurrentPeak, updateValue, floor } = useContext(dateToggleContext);
   const [info, setInfo] = useState(
     [
       {
@@ -61,7 +61,14 @@ function Dashboard() {
     peak: true,
     power: true,
   });
-
+  const [eventData, setEventData] = useState([
+    {
+      txId: "",
+      user: "",
+      date: "",
+      cost: "",
+    },
+  ]);
 
   const reRender = () => {
     setState(!state);
@@ -91,7 +98,7 @@ function Dashboard() {
     let data = [];
     let powerData = [];
     let peakData = [];
-
+    let events = [];
     getDateFromApi(date, 0, floor.id)
       .then(
         (response) => {
@@ -124,21 +131,47 @@ function Dashboard() {
                 }
                 data.push(DataObj);
                 //Power data
+                let YpowerData = parseFrame(element.meassure, "power");
                 const PowerObj = {
                   x: element.date,
-                  y: parseFrame(element.meassure, "power")
+                  y: YpowerData
+                }
+
+                if (YpowerData > maxConsumption) {
+                  console.log(`peakData: ${powerData}, maxCurrentPeak: ${maxConsumption}`);
+                  console.log(`MAX Consuption detected! at date: ${element.date}`);
+                  events.push({
+                    txId: "Overloading",
+                    user: `Piso ${floor.id}`,
+                    date: element.date.split('T')[0],
+                    cost: "Alert",
+                  })
                 }
                 powerData.push(PowerObj);
                 //Peak Data
+                let Ydata = parseFrame(element.meassure, "peak")
                 const PeakObj = {
                   x: element.date,
-                  y: parseFrame(element.meassure, "peak")
+                  y: Ydata
+                }
+                
+                //Comparo si el pico no supera el pico obtenido por los datos.
+                if (Ydata > maxCurrentPeak) {
+                  console.log(`peakData: ${Ydata}, maxCurrentPeak: ${maxCurrentPeak}`);
+                  console.log(`MAX PEAK detected! at date: ${element.date}`);
+                  events.push({
+                    txId: "Overcurrent",
+                    user: `Piso ${floor.id}`,
+                    date: element.date.split('T')[0],
+                    cost: "Alert",
+                  })
                 }
                 peakData.push(PeakObj)
               });
               setInfo(data);
               setPower(powerData);
               setPeak(peakData);
+              setEventData(events);
             }
           }
         }
@@ -168,7 +201,6 @@ function Dashboard() {
     }
   }
 
-
   function CurrenthandlerChange(event) {
     if (!event.target.checked) {
       setIsSelected((currentValue) => ({
@@ -184,7 +216,6 @@ function Dashboard() {
       }));
     }
   }
-
 
   function PeakhandlerChange(event) {
     if (!event.target.checked) {
@@ -202,8 +233,6 @@ function Dashboard() {
 
     }
   }
-
-
 
 
   return (
@@ -293,8 +322,8 @@ function Dashboard() {
         >
           {noData === true ? <NoData inBox={true} /> : <StatBox
             title="Cos phi"
-            subtitle= {isNaN(parseFloat(frame[10]).toFixed(2))===true? '0.00' : parseFloat(frame[10]).toFixed(2)}
-            progress={isNaN(parseFloat(frame[10]).toFixed(2))===true? 0.0 : parseFloat(frame[10]).toFixed(2)}
+            subtitle={isNaN(parseFloat(frame[10]).toFixed(2)) === true ? '0.00' : parseFloat(frame[10]).toFixed(2)}
+            progress={isNaN(parseFloat(frame[10]).toFixed(2)) === true ? 0.0 : parseFloat(frame[10]).toFixed(2)}
             icon={
               <ElectricalServicesIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -401,7 +430,7 @@ function Dashboard() {
               </Typography>
             </Box>
             {/*Informacion de los eventos (traer de la base de datos) */}
-            {mockTransactions.map((transaction, i) => (
+            {eventData.map((transaction, i) => (
               <Box
                 key={`${transaction.txId}-${i}`}
                 display="flex"
@@ -459,7 +488,7 @@ function Dashboard() {
               alignItems="center"
               mt="25px"
             >
-              <ProgressCircle size="125" progress={isNaN(parseFloat(frame[8]).toFixed(2))===true? '0.00' : parseFloat(frame[8]).toFixed(2)/100} />
+              <ProgressCircle size="125" progress={isNaN(parseFloat(frame[8]).toFixed(2)) === true ? '0.00' : parseFloat(frame[8]).toFixed(2) / 100} />
               <Typography
                 variant="h5"
                 color={colors.greenAccent[500]}
