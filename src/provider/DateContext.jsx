@@ -29,13 +29,17 @@ export function DateProvider(props) {
         id: 1
     });
 
+    const [maxConsumption, setMaxConsumption] = useState(500);
+
     const updateFloorValue = (newID) => {
         setFloor((currentValue) => ({
             ...currentValue,
             id: newID,
         }))
     }
-
+    const updateMaxConsuption = (max) => {
+        setMaxConsumption((max))
+    }
 
     const updateValue = (max, average) => {
         setValues((currentValue) => ({
@@ -59,7 +63,7 @@ export function DateProvider(props) {
 
     return (
 
-        <dateToggleContext.Provider value={{ date, values, floor, updateDate, updateValue, updateFloorValue }}>
+        <dateToggleContext.Provider value={{ date, values, floor, maxConsumption, updateDate, updateValue, updateFloorValue, updateMaxConsuption }}>
             {props.children}
         </dateToggleContext.Provider>
     );

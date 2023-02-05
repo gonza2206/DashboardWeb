@@ -14,6 +14,7 @@ import Line from "./scenes/Line";
 import Contact from "./scenes/contact";
 import FAQ from "./scenes/faq";
 import Contacts from "./scenes/contact";
+import Summary from "./scenes/summary";
 
 function App() {
 
@@ -39,8 +40,8 @@ function App() {
                 <Route path="/Line" element={<Line/>} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/contacts" element={<Contacts />} />
-                
-                {/* <Route path="/Contact" element={<Contact/>} /> */}
+                <Route path="/summary" element={<Summary />} />
+
               </Routes>
 
             </main>

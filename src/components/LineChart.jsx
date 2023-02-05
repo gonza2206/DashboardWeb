@@ -3,13 +3,13 @@ import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import { useEffect } from "react";
 
-const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected }) => {
+const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected, isSummary = false }) => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   let power = {
-    id: "Power",
+    id: isSummary === true ? "Power Floor 2" : "Power",
     color: tokens("dark").blueAccent[500],
     data: powerData
   }
@@ -19,7 +19,7 @@ const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected }
     data: data
   }
   let peak = {
-    id: "Peak Current",
+    id: isSummary === true ? "Power Floor 4" : "Peak Current",
     color: tokens("dark").redAccent[500],
     data: peakData
   }
@@ -27,7 +27,7 @@ const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected }
   const setData = () => {
     let LineChartData = [power, peak, current]
 
-    if (isDashboard === false) {
+    if (isDashboard === false && isSummary===false) {
 
       return (LineChartData)
     }
@@ -49,11 +49,27 @@ const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected }
     if (selected.current === false && selected.power === false) {
       LineChartData = [peak]
     }
-    if (selected.peak === false && selected.power === false) {
+    if (selected.peak === false && selected.power === false && isSummary === false) {
       LineChartData = [current]
     }
     if (selected.peak === false && selected.power === false && selected.current === false) {
       LineChartData = []
+    }
+
+    if (isSummary === true) {
+      if (selected.peak === false && selected.power === true) {
+        LineChartData = [power]
+      }
+      if (selected.power === false && selected.peak === true) {
+        LineChartData = [peak]
+      }
+      if (selected.peak === false && selected.power === false )
+      {
+        LineChartData = []
+      }
+      if(selected.peak === true && selected.power === true ){
+        LineChartData = [power, peak]
+      }
     }
 
     return (LineChartData)

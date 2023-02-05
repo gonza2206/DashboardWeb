@@ -293,8 +293,8 @@ function Dashboard() {
         >
           {noData === true ? <NoData inBox={true} /> : <StatBox
             title="Cos phi"
-            subtitle="0.98"
-            progress="0.98"
+            subtitle= {isNaN(parseFloat(frame[10]).toFixed(2))===true? '0.00' : parseFloat(frame[10]).toFixed(2)}
+            progress={isNaN(parseFloat(frame[10]).toFixed(2))===true? 0.0 : parseFloat(frame[10]).toFixed(2)}
             icon={
               <ElectricalServicesIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -328,12 +328,11 @@ function Dashboard() {
               </Typography>
 
               {noData !== true && <Typography
-                variant="h3"
+                variant="h4"
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
               >
-                Consumption 380 kw/h
-
+                Current, Power and Peak Current Dynamics
 
               </Typography>}
               <FormControlLabel control={<Checkbox defaultChecked onChange={PeakhandlerChange} />} label="Peak" />
@@ -460,7 +459,7 @@ function Dashboard() {
               alignItems="center"
               mt="25px"
             >
-              <ProgressCircle size="125" />
+              <ProgressCircle size="125" progress={isNaN(parseFloat(frame[8]).toFixed(2))===true? '0.00' : parseFloat(frame[8]).toFixed(2)/100} />
               <Typography
                 variant="h5"
                 color={colors.greenAccent[500]}
