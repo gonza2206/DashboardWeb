@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export default axios.create(
     {
-        baseURL: 'http://34.234.201.52:3010',// de donde obtengo los datos
+        baseURL: 'http://localhost:3010',// de donde obtengo los datos
         responseType: 'json',// tipo de respuesta que espera
         timeout: 6000 // si la peticion falla despues de 6 segundos tiro un error
     }
