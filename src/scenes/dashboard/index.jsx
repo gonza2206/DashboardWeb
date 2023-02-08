@@ -138,8 +138,6 @@ function Dashboard() {
                 }
 
                 if (YpowerData > maxConsumption) {
-                  console.log(`peakData: ${powerData}, maxCurrentPeak: ${maxConsumption}`);
-                  console.log(`MAX Consuption detected! at date: ${element.date}`);
                   events.push({
                     txId: "Overloading",
                     user: `Piso ${floor.id}`,
@@ -154,11 +152,9 @@ function Dashboard() {
                   x: element.date,
                   y: Ydata
                 }
-                
+
                 //Comparo si el pico no supera el pico obtenido por los datos.
                 if (Ydata > maxCurrentPeak) {
-                  console.log(`peakData: ${Ydata}, maxCurrentPeak: ${maxCurrentPeak}`);
-                  console.log(`MAX PEAK detected! at date: ${element.date}`);
                   events.push({
                     txId: "Overcurrent",
                     user: `Piso ${floor.id}`,
@@ -283,9 +279,9 @@ function Dashboard() {
           justifyContent="center"
         >
           {noData === true ? <NoData inBox={true} /> : <StatBox
-            title="THD [%]"
-            subtitle={parseFloat(frame[7]).toFixed(2)}
-            progress={parseFloat(frame[7]).toFixed(2) / 100}
+            title="Q [Var]"
+            subtitle={parseFloat(frame[11]).toFixed(2)}
+            progress={parseFloat(frame[11]).toFixed(1) / 100}
             icon={
               <ElectricBoltIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -494,9 +490,9 @@ function Dashboard() {
                 color={colors.greenAccent[500]}
                 sx={{ mt: "15px" }}
               >
-                280 kw Save!
+                {isNaN(parseFloat(frame[8]).toFixed(2)) === false ? parseFloat(frame[8]).toFixed(2) : '0.00'} kwh
               </Typography>
-              <Typography>Includes extra misc expenditures and costs</Typography>
+              <Typography>This value should not be use as a payment reference</Typography>
             </Box>
           </Box>}
         {/*BarChar harmonics */}
@@ -512,6 +508,15 @@ function Dashboard() {
           >
             Harmonics
           </Typography>
+          {noData !== true && <Typography
+            variant="h4"
+            fontWeight="bold"
+            color={colors.greenAccent[500]}
+            marginLeft="30px"
+          >
+            THD: {parseFloat(frame[7]).toFixed(2)*100}% 
+
+          </Typography>}
           {/*Graph */}
           <Box height="250px" mt="-20px">
             {noData === true ? <NoData /> : <BarChart isDashboard={true} frame={frame} />}

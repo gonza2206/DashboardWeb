@@ -9,7 +9,7 @@ const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected, 
   const colors = tokens(theme.palette.mode);
 
   let power = {
-    id: isSummary === true ? "Power Floor 2" : "Power",
+    id: isSummary === true ? "Consumo Piso 2" : "Power",
     color: tokens("dark").blueAccent[500],
     data: powerData
   }
@@ -19,7 +19,7 @@ const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected, 
     data: data
   }
   let peak = {
-    id: isSummary === true ? "Power Floor 4" : "Peak Current",
+    id: isSummary === true ? "Consumo Piso 4" : "Peak Current",
     color: tokens("dark").redAccent[500],
     data: peakData
   }
@@ -134,7 +134,7 @@ const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected, 
         orient: "bottom",
         tickSize: 0,
         tickPadding: 10,
-        tickRotation: 15,
+        tickRotation: 45,
         legend: "Meassures", // added
         legendOffset: 80,
         legendPosition: "middle",
@@ -150,7 +150,7 @@ const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected, 
         legendPosition: "middle",
       }}
       enableGridX={false}
-      enableGridY={false}
+      enableGridY={true}
       pointSize={6}
       enableSlices="x"
       pointColor={{ theme: "background" }}

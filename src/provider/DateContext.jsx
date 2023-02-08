@@ -7,10 +7,10 @@ export function DateProvider(props) {
 
     const actualDate = new Date();
     let year = actualDate.getFullYear();
-    let month = actualDate.getMonth();
+    let month = actualDate.getMonth()+1;
     let day = actualDate.getDate();
     let initialDefaulTime = `${year}-${month}-1`;
-    let finalDefaulTime = `${year}-${month}-${day}`;
+    let finalDefaulTime = `${year}-${month}-${day+1}`;
     let defaultMonth = 0;
 
 
