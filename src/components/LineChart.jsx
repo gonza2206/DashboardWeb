@@ -132,9 +132,9 @@ const LineChart = ({ isDashboard, data, refresh, powerData, peakData, selected, 
       axisRight={null}
       axisBottom={!isDashboard ? {
         orient: "bottom",
-        tickSize: 0,
+        tickSize: 2,
         tickPadding: 10,
-        tickRotation: 45,
+        tickRotation: 15,
         legend: "Meassures", // added
         legendOffset: 80,
         legendPosition: "middle",
